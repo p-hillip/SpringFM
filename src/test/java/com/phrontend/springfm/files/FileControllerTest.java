@@ -34,17 +34,19 @@ class FileControllerTest {
 
     private UUID testFileId;
     private StoredFile testFile;
+    private String testUserId;
 
     @BeforeEach
     void setUp() {
         testFileId = UUID.randomUUID();
+        testUserId = "123";
         testFile = StoredFile.builder()
                 .id(testFileId)
                 .title("Test Document")
                 .filename("test-doc.pdf")
                 .category(FileCategory.DOCUMENT)
                 .uploadedAt(Instant.now())
-                .uploadedBy("user@example.com")
+                .uploadedBy("123")
                 .fileSize(1024)
                 .storagePath("/storage/test-doc.pdf")
                 .contentType("application/pdf")
@@ -58,7 +60,7 @@ class FileControllerTest {
         when(fileService.loadAsResource(testFile)).thenReturn(mockResource);
 
         // Act
-        ResponseEntity<Resource> response = fileController.download(testFileId);
+        ResponseEntity<Resource> response = fileController.download(testFileId, testUserId);
 
         // Assert
         assertThat(response).isNotNull();
@@ -83,7 +85,7 @@ class FileControllerTest {
         when(fileService.loadAsResource(testFile)).thenReturn(mockResource);
 
         // Act
-        ResponseEntity<Resource> response = fileController.download(testFileId);
+        ResponseEntity<Resource> response = fileController.download(testFileId, testUserId);
 
         // Assert
         assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.IMAGE_JPEG);
@@ -100,7 +102,7 @@ class FileControllerTest {
         when(fileService.loadAsResource(testFile)).thenReturn(mockResource);
 
         // Act
-        ResponseEntity<Resource> response = fileController.download(testFileId);
+        ResponseEntity<Resource> response = fileController.download(testFileId, testUserId);
 
         // Assert
         assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_OCTET_STREAM);
@@ -115,7 +117,7 @@ class FileControllerTest {
         when(fileService.loadAsResource(testFile)).thenReturn(mockResource);
 
         // Act
-        ResponseEntity<Resource> response = fileController.download(testFileId);
+        ResponseEntity<Resource> response = fileController.download(testFileId, testUserId);
 
         // Assert
         assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_OCTET_STREAM);
@@ -129,7 +131,7 @@ class FileControllerTest {
                 .thenThrow(new IllegalArgumentException("File not found"));
 
         // Act & Assert
-        assertThatThrownBy(() -> fileController.download(invalidId))
+        assertThatThrownBy(() -> fileController.download(invalidId, testUserId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("File not found");
 
@@ -145,7 +147,7 @@ class FileControllerTest {
         when(fileService.loadAsResource(testFile)).thenReturn(mockResource);
 
         // Act
-        ResponseEntity<Resource> response = fileController.download(testFileId);
+        ResponseEntity<Resource> response = fileController.download(testFileId, testUserId);
 
         // Assert
         assertThat(response.getHeaders().getContentLength()).isEqualTo(2048000);
@@ -160,7 +162,7 @@ class FileControllerTest {
         when(fileService.loadAsResource(testFile)).thenReturn(mockResource);
 
         // Act
-        ResponseEntity<Resource> response = fileController.download(testFileId);
+        ResponseEntity<Resource> response = fileController.download(testFileId, testUserId);
 
         // Assert
         assertThat(response.getHeaders().get(HttpHeaders.CONTENT_DISPOSITION)).isNotNull();
@@ -179,7 +181,7 @@ class FileControllerTest {
         when(fileService.loadAsResource(testFile)).thenReturn(mockResource);
 
         // Act
-        ResponseEntity<Resource> response = fileController.download(testFileId);
+        ResponseEntity<Resource> response = fileController.download(testFileId, testUserId);
 
         // Assert
         assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.parseMediaType("video/mp4"));
@@ -196,7 +198,7 @@ class FileControllerTest {
         when(fileService.loadAsResource(testFile)).thenReturn(mockResource);
 
         // Act
-        ResponseEntity<Resource> response = fileController.download(testFileId);
+        ResponseEntity<Resource> response = fileController.download(testFileId, testUserId);
 
         // Assert
         assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.parseMediaType("audio/mpeg"));

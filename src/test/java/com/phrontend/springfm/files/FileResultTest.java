@@ -30,7 +30,7 @@ class FileResultTest {
                 .build();
 
         // Act
-        FileResult result = FileResult.fromEntity(file);
+        FileResult result = FileResult.fromEntity(file, "Test User");
 
         // Assert
         assertThat(result).isNotNull();
@@ -39,7 +39,8 @@ class FileResultTest {
         assertThat(result.filename()).isEqualTo("test-document.pdf");
         assertThat(result.category()).isEqualTo(FileCategory.DOCUMENT);
         assertThat(result.uploadedAt()).isEqualTo(uploadedAt);
-        assertThat(result.uploadedBy()).isEqualTo("test@example.com");
+        assertThat(result.uploadedBy()).isEqualTo("Test User");
+        assertThat(result.uploadedByUserId()).isEqualTo("test@example.com");
         assertThat(result.fileSize()).isEqualTo(1024000);
         assertThat(result.metadataText()).isEqualTo("Test metadata content");
         assertThat(result.downloadUrl()).isEqualTo("/api/files/" + fileId + "/download");
@@ -62,7 +63,7 @@ class FileResultTest {
                 .build();
 
         // Act
-        FileResult result = FileResult.fromEntity(file);
+        FileResult result = FileResult.fromEntity(file, "Test User");
 
         // Assert
         assertThat(result.category()).isEqualTo(FileCategory.IMAGE);
@@ -87,7 +88,7 @@ class FileResultTest {
                 .build();
 
         // Act
-        FileResult result = FileResult.fromEntity(file);
+        FileResult result = FileResult.fromEntity(file, "Test User");
 
         // Assert
         assertThat(result.metadataText()).isNull();
@@ -110,7 +111,7 @@ class FileResultTest {
                     .storagePath("/storage/test")
                     .build();
 
-            FileResult result = FileResult.fromEntity(file);
+            FileResult result = FileResult.fromEntity(file, "Test User");
 
             assertThat(result.category()).isEqualTo(category);
         }

@@ -73,7 +73,7 @@ class SearchControllerTest {
         assertThat(response).isNotNull();
         assertThat(response.results()).hasSize(2);
         assertThat(response.total()).isEqualTo(2);
-        assertThat(response.page()).isEqualTo(0);
+        assertThat(response.page()).isEqualTo(1); // 1-based pagination for frontend
         assertThat(response.size()).isEqualTo(20);
         
         verify(fileSearchService).search(isNull(), isNull(), any(PageRequest.class));
@@ -188,9 +188,9 @@ class SearchControllerTest {
     @Test
     void search_WithCustomPageAndSize_UsesProvidedValues() {
         // Arrange
-        Page<StoredFile> page = new PageImpl<>(Collections.emptyList(), 
-                PageRequest.of(2, 10), 0);
-        
+        Page<StoredFile> page = new PageImpl<>(Collections.emptyList(),
+                PageRequest.of(1, 10), 0); // Backend receives page-1 (2-1=1)
+
         when(fileSearchService.search(isNull(), isNull(), any(PageRequest.class)))
                 .thenReturn(page);
 
@@ -198,11 +198,11 @@ class SearchControllerTest {
         SearchResponse response = searchController.search(null, null, "uploadedAt", "desc", 2, 10);
 
         // Assert
-        assertThat(response.page()).isEqualTo(2);
+        assertThat(response.page()).isEqualTo(2); // Returns 1-based page (1+1=2)
         assertThat(response.size()).isEqualTo(10);
-        
-        verify(fileSearchService).search(isNull(), isNull(), 
-                argThat(pr -> pr.getPageNumber() == 2 && pr.getPageSize() == 10));
+
+        verify(fileSearchService).search(isNull(), isNull(),
+                argThat(pr -> pr.getPageNumber() == 1 && pr.getPageSize() == 10)); // Verify 0-based backend call
     }
 
     @Test

@@ -37,9 +37,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/logout").permitAll()
                         .requestMatchers("/api/search/**").permitAll()
+                        .requestMatchers("/api/files/*/download").permitAll()  // Public downloads
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers("/api/auth/me").authenticated()
-                        .requestMatchers("/api/files/**").authenticated()
+                        .requestMatchers("/api/files/**").authenticated()  // Upload requires auth
                         .anyRequest().denyAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

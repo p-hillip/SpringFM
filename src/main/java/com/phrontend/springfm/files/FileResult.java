@@ -9,17 +9,19 @@ public record FileResult(
         FileCategory category,
         Instant uploadedAt,
         String uploadedBy,
+        String uploadedByUserId,
         long fileSize,
         String metadataText,
         String downloadUrl
 ) {
-    public static FileResult fromEntity(StoredFile file) {
+    public static FileResult fromEntity(StoredFile file, String displayName) {
         return new FileResult(
                 file.getId().toString(),
                 file.getTitle(),
                 file.getFilename(),
                 file.getCategory(),
                 file.getUploadedAt(),
+                displayName != null ? displayName : "Unknown User",
                 file.getUploadedBy(),
                 file.getFileSize(),
                 file.getMetadataText(),

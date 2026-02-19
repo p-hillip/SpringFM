@@ -15,9 +15,9 @@ class SearchResponseTest {
     void constructor_WithAllFields_CreatesResponse() {
         // Arrange
         FileResult file1 = new FileResult("1", "File 1", "file1.txt", FileCategory.DOCUMENT,
-                Instant.now(), "user@example.com", 1024, null, "/api/files/1/download");
+                Instant.now(), "Test User", "123", 1024, null, "/api/files/1/download");
         FileResult file2 = new FileResult("2", "File 2", "file2.txt", FileCategory.IMAGE,
-                Instant.now(), "user@example.com", 2048, null, "/api/files/2/download");
+                Instant.now(), "Test User", "123", 2048, null, "/api/files/2/download");
         List<FileResult> results = Arrays.asList(file1, file2);
 
         // Act
@@ -46,7 +46,7 @@ class SearchResponseTest {
     void results_ReturnsImmutableList() {
         // Arrange
         FileResult file = new FileResult("1", "File", "file.txt", FileCategory.DOCUMENT,
-                Instant.now(), "user@example.com", 1024, null, "/api/files/1/download");
+                Instant.now(), "Test User", "123", 1024, null, "/api/files/1/download");
         List<FileResult> results = Collections.singletonList(file);
         SearchResponse response = new SearchResponse(results, 1, 0, 20);
 

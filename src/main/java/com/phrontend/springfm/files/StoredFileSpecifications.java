@@ -1,7 +1,8 @@
 package com.phrontend.springfm.files;
 
-import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
+
+import java.util.List;
 
 public final class StoredFileSpecifications {
 
