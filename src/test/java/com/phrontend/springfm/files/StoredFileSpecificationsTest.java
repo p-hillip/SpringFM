@@ -2,6 +2,7 @@ package com.phrontend.springfm.files;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,10 @@ class StoredFileSpecificationsTest {
 
     @Mock
     private Predicate predicate;
+
+    @Mock
+    @SuppressWarnings("rawtypes")
+    private Path categoryPath;
 
     @Test
     void matchesQuery_WithValidQuery_ReturnsSpecification() {
@@ -102,10 +107,12 @@ class StoredFileSpecificationsTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void categoryIn_WithCategories_ReturnsNonNullSpecification() {
         // Arrange
         List<FileCategory> categories = Arrays.asList(FileCategory.DOCUMENT, FileCategory.IMAGE);
-        when(root.get("category")).thenReturn(null);
+        when(root.get("category")).thenReturn(categoryPath);
+        when(categoryPath.in(categories)).thenReturn(predicate);
 
         // Act
         Specification<StoredFile> spec = StoredFileSpecifications.categoryIn(categories);
@@ -113,8 +120,9 @@ class StoredFileSpecificationsTest {
 
         // Assert
         assertThat(spec).isNotNull();
-        assertThat(result).isNotNull();
+        assertThat(result).isNotNull().isEqualTo(predicate);
         verify(root).get("category");
+        verify(categoryPath).in(categories);
     }
 
     @Test
@@ -148,10 +156,12 @@ class StoredFileSpecificationsTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void categoryIn_WithSingleCategory_ReturnsNonNullSpecification() {
         // Arrange
         List<FileCategory> categories = Collections.singletonList(FileCategory.VIDEO);
-        when(root.get("category")).thenReturn(null);
+        when(root.get("category")).thenReturn(categoryPath);
+        when(categoryPath.in(categories)).thenReturn(predicate);
 
         // Act
         Specification<StoredFile> spec = StoredFileSpecifications.categoryIn(categories);
@@ -159,15 +169,18 @@ class StoredFileSpecificationsTest {
 
         // Assert
         assertThat(spec).isNotNull();
-        assertThat(result).isNotNull();
+        assertThat(result).isNotNull().isEqualTo(predicate);
         verify(root).get("category");
+        verify(categoryPath).in(categories);
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void categoryIn_WithAllCategories_ReturnsNonNullSpecification() {
         // Arrange
         List<FileCategory> allCategories = Arrays.asList(FileCategory.values());
-        when(root.get("category")).thenReturn(null);
+        when(root.get("category")).thenReturn(categoryPath);
+        when(categoryPath.in(allCategories)).thenReturn(predicate);
 
         // Act
         Specification<StoredFile> spec = StoredFileSpecifications.categoryIn(allCategories);
@@ -175,7 +188,8 @@ class StoredFileSpecificationsTest {
 
         // Assert
         assertThat(spec).isNotNull();
-        assertThat(result).isNotNull();
+        assertThat(result).isNotNull().isEqualTo(predicate);
         verify(root).get("category");
+        verify(categoryPath).in(allCategories);
     }
 }
