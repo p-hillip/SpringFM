@@ -54,6 +54,14 @@ dependencies {
 tasks.named('test') {
     outputs.dir snippetsDir
     useJUnitPlatform()
+
+    // added mockito as a java agent to avoid warnings for JDK >= 21
+    doFirst {
+        def byteBuddyAgent = configurations.testRuntimeClasspath.find { it.name.contains('byte-buddy-agent') }
+        if (byteBuddyAgent) {
+            jvmArgs "-javaagent:${byteBuddyAgent}"
+        }
+    }
 }
 
 tasks.named('asciidoctor') {

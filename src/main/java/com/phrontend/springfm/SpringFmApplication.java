@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties({JwtProperties.class, StorageProperties.class})
 public class SpringFmApplication {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(SpringFmApplication.class, args);
     }
 
