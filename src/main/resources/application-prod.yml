@@ -1,0 +1,17 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+server:
+  forward-headers-strategy: framework
+
+app:
+  cors:
+    allowed-origins: "https://phrontend.com,https://www.phrontend.com"
+  storage:
+    root: /var/lib/sfks/storage
+
+sfk:
+  jwt:
+    issuer: "https://phrontend.com"

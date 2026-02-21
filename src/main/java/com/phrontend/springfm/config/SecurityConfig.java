@@ -1,8 +1,11 @@
 package com.phrontend.springfm.config;
 
 import com.phrontend.springfm.auth.JwtAuthenticationFilter;
+
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +29,9 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Value("${app.cors.allowed-origins}")
+    private String allowedOrigins;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http
@@ -36,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/logout").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/api/**").permitAll()
                         .requestMatchers("/api/search/**").permitAll()
                         .requestMatchers("/api/files/*/download").permitAll()  // Public downloads
                         .requestMatchers("/actuator/health").permitAll()
@@ -61,7 +68,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .toList());
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

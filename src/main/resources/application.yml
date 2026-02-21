@@ -1,25 +1,33 @@
 spring:
   application:
     name: SpringFM
+
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+
   datasource:
     url: jdbc:mariadb://localhost:3306/sfk
     username: sfk
-    password: sfk
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
   jpa:
     hibernate:
       ddl-auto: update
     open-in-view: false
+
   threads:
     virtual:
       enabled: true
 
 sfk:
   jwt:
-    secret: ${SFK_JWT_SECRET:d9f391e93640f78468856b1259c47f9944e6a852a9b29f53083999d08d1bb27b}
-    issuer: sfk
+    secret: ${SFK_JWT_SECRET}
+    issuer: ${SFK_JWT_ISSUER:https://phrontend.com}
     access-token-ttl: PT60M
     remember-me-ttl: PT168H
 
 app:
   storage:
-    root: storage
+    root: ${APP_STORAGE_ROOT:storage}

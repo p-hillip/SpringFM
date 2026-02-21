@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+app:
+  cors:
+    allowed-origins: "http://localhost:5173"
+  storage:
+    root: storage
+
+sfk:
+  jwt:
+    issuer: "http://localhost:8080"
+    secret: ${SFK_JWT_SECRET:e45df1ee866efc402546de84ad9b1cdd46512853a022d6a649f3bfc638e1d276}
